@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDownRight, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 
 function HeroSection() {
@@ -70,8 +71,8 @@ function HeroSection() {
             }}
             className="mt-7 max-w-md text-sm leading-7 text-muted sm:text-base sm:leading-8"
           >
-            A thoughtful collection of lasting pieces for the way you dress,
-            gather and find beauty in the everyday.
+            Considered pieces for getting dressed, giving well and making home
+            feel like yours.
           </motion.p>
           <motion.div
             variants={{
@@ -84,26 +85,26 @@ function HeroSection() {
             }}
             className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4"
           >
-            <a
-              href="#trending"
+            <Link
+              to="/shop"
               className="group inline-flex min-h-12 items-center gap-3 bg-olive px-6 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-charcoal active:scale-[0.98]"
             >
-              Explore the edit
+              Shop now
               <ArrowRight
                 size={15}
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
-            </a>
-            <a
-              href="#journal"
+            </Link>
+            <Link
+              to="/shop?collection=new"
               className="group inline-flex items-center gap-2 text-xs font-medium text-charcoal"
             >
-              Our point of view
+              Explore new arrivals
               <ArrowDownRight
                 size={15}
                 className="text-bronze transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
               />
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

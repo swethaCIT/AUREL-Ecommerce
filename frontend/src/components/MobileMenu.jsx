@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 function MobileMenu({ isOpen, items, onClose }) {
   const reducedMotion = useReducedMotion()
@@ -21,10 +22,8 @@ function MobileMenu({ isOpen, items, onClose }) {
         >
           <div className="flex flex-col px-6 pb-5 pt-2">
             {items.map((item, index) => (
-              <motion.a
+              <motion.div
                 key={item.label}
-                href={item.href}
-                onClick={onClose}
                 initial={reducedMotion ? false : { opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{
@@ -32,10 +31,16 @@ function MobileMenu({ isOpen, items, onClose }) {
                   delay: reducedMotion ? 0 : index * 0.04,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="border-b border-charcoal/10 py-4 font-serif text-2xl text-charcoal"
+                className="border-b border-charcoal/10"
               >
-                {item.label}
-              </motion.a>
+                <Link
+                  to={item.to}
+                  onClick={onClose}
+                  className="block py-4 font-serif text-2xl text-charcoal"
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
             ))}
           </div>
         </motion.nav>

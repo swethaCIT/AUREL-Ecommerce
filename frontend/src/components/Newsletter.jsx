@@ -13,19 +13,18 @@ function Newsletter() {
   return (
     <section
       id="newsletter"
-      className="bg-paper px-5 py-16 sm:px-8 sm:py-20 lg:px-14"
+      className="bg-paper px-5 py-12 sm:px-8 sm:py-14 lg:px-14"
     >
-      <div className="mx-auto grid max-w-[90rem] gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-end">
+      <div className="mx-auto grid max-w-[90rem] gap-6 lg:grid-cols-[1fr_0.85fr] lg:items-end">
         <div className="max-w-xl">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-olive">
-            A note from AUREL
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.23em] text-olive">
+            The AUREL note
           </p>
-          <h2 className="mt-4 font-serif text-3xl font-normal leading-tight tracking-[-0.03em] text-charcoal sm:text-4xl">
-            Good things, thoughtfully delivered.
+          <h2 className="mt-3 font-serif text-2xl font-normal leading-tight tracking-[-0.03em] text-charcoal sm:text-3xl">
+            Considered finds, occasionally.
           </h2>
-          <p className="mt-3 text-sm leading-7 text-muted">
-            Occasional notes on new finds, considered living and the little
-            things worth keeping.
+          <p className="mt-2 text-xs leading-6 text-muted">
+            New arrivals and a few things worth keeping close.
           </p>
         </div>
 

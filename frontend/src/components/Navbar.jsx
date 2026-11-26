@@ -1,94 +1,115 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Heart, Search, ShoppingBag, X } from 'lucide-react'
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useShop } from '../hooks/useShop.js'
 import MobileMenu from './MobileMenu.jsx'
 
 const navItems = [
-  { label: 'Fashion', href: '#categories' },
-  { label: 'Objects', href: '#categories' },
-  { label: 'Our edit', href: '#trending' },
-  { label: 'Journal', href: '#journal' },
+  { label: 'NEW IN', to: '/shop?collection=new' },
+  { label: 'FASHION', to: '/category/fashion' },
+  { label: 'ACCESSORIES', to: '/category/accessories' },
+  { label: 'BEAUTY', to: '/category/beauty' },
+  { label: 'LIVING', to: '/category/living' },
 ]
 
-function Navbar({ onSearch }) {
+function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
+  const { bagCount, wishlistIds } = useShop()
 
   function submitSearch(event) {
     event.preventDefault()
-    document.getElementById('trending')?.scrollIntoView({ behavior: 'smooth' })
+    const query = searchTerm.trim()
+    navigate(query ? `/shop?search=${encodeURIComponent(query)}` : '/shop')
     setSearchOpen(false)
+    setMenuOpen(false)
   }
 
   return (
     <header className="sticky top-0 z-50 border-b border-charcoal/10 bg-ivory/95 backdrop-blur-md">
-      <div className="relative mx-auto flex h-[4.5rem] max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:h-20 lg:px-14">
-        <a
-          href="#top"
+      <div className="relative mx-auto flex h-[4.5rem] max-w-[90rem] items-center justify-between gap-3 px-4 sm:px-8 lg:h-20 lg:px-14">
+        <Link
+          to="/"
           className="flex items-baseline gap-2"
           aria-label="AUREL home"
         >
-          <span className="font-serif text-[1.65rem] font-medium tracking-[0.12em] text-charcoal">
+          <span className="font-serif text-2xl font-medium tracking-[0.12em] text-charcoal sm:text-[1.65rem]">
             AUREL
           </span>
-          <span className="hidden text-[0.55rem] uppercase tracking-[0.18em] text-muted sm:inline">
-            The art of living
+          <span className="hidden text-[0.55rem] uppercase tracking-[0.18em] text-muted xl:inline">
+            The Art of Everyday Living.
           </span>
-        </a>
+        </Link>
 
         <nav
           aria-label="Main navigation"
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 lg:flex xl:gap-7"
         >
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
-              href={item.href}
-              className="text-xs tracking-wide text-charcoal/80 transition-colors hover:text-olive"
+              to={item.to}
+              className="whitespace-nowrap text-[0.62rem] font-medium tracking-[0.12em] text-charcoal/80 transition-colors hover:text-olive xl:text-xs"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-3">
+        <div className="ml-auto flex items-center gap-0.5 sm:gap-2">
           <button
             type="button"
-            onClick={() => setSearchOpen((open) => !open)}
+            onClick={() => {
+              setSearchOpen((open) => !open)
+              setMenuOpen(false)
+            }}
             aria-label={searchOpen ? 'Close search' : 'Open search'}
             aria-expanded={searchOpen}
-            className="grid size-10 place-items-center text-charcoal transition-colors hover:text-olive"
+            className="grid size-9 place-items-center text-charcoal transition-colors hover:text-olive sm:size-10"
           >
             {searchOpen ? <X size={19} strokeWidth={1.5} /> : <Search size={19} strokeWidth={1.5} />}
           </button>
-          <a
-            href="#trending"
-            aria-label="Browse pieces to add to your wishlist"
-            className="hidden size-10 place-items-center text-charcoal transition-colors hover:text-olive sm:grid"
+          <Link
+            to="/wishlist"
+            aria-label={`Wishlist, ${wishlistIds.length} saved items`}
+            className="relative grid size-9 place-items-center text-charcoal transition-colors hover:text-olive sm:size-10"
           >
             <Heart size={19} strokeWidth={1.5} />
-          </a>
-          <button
-            type="button"
-            aria-label="Shopping bag, 0 items"
-            title="Shopping bag · 0 items"
-            className="relative grid size-10 place-items-center text-charcoal transition-colors hover:text-olive"
+            {wishlistIds.length > 0 && (
+              <span className="absolute right-0 top-0 grid size-4 place-items-center rounded-full bg-olive text-[0.55rem] text-white">
+                {wishlistIds.length}
+              </span>
+            )}
+          </Link>
+          <Link
+            to="/bag"
+            aria-label={`Shopping bag, ${bagCount} items`}
+            title={`Shopping bag · ${bagCount} items`}
+            className="relative grid size-9 place-items-center text-charcoal transition-colors hover:text-olive sm:size-10"
           >
             <ShoppingBag size={19} strokeWidth={1.5} />
-            <span className="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-olive text-[0.55rem] text-white">
-              0
+            <span className="absolute right-0 top-0 grid size-4 place-items-center rounded-full bg-olive text-[0.55rem] text-white">
+              {bagCount}
             </span>
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            className="grid size-10 place-items-center text-charcoal md:hidden"
+            className="grid size-9 place-items-center text-charcoal lg:hidden sm:size-10"
           >
-            {menuOpen ? <X size={20} strokeWidth={1.5} /> : <span className="text-xs uppercase tracking-[0.12em]">Menu</span>}
+            {menuOpen ? (
+              <X size={20} strokeWidth={1.5} />
+            ) : (
+              <span className="text-[0.62rem] uppercase tracking-[0.12em]">
+                Menu
+              </span>
+            )}
           </button>
         </div>
 
@@ -115,7 +136,6 @@ function Navbar({ onSearch }) {
                 value={searchTerm}
                 onChange={(event) => {
                   setSearchTerm(event.target.value)
-                  onSearch(event.target.value)
                 }}
                 onKeyDown={(event) => {
                   if (event.key === 'Escape') setSearchOpen(false)

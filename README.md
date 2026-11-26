@@ -8,9 +8,10 @@ AUREL is a premium lifestyle and fashion shopping single-page application. This 
 
 - **Phase 01 — Project initialization:** Complete. React/Vite, Tailwind CSS v4, and the Flask application-factory foundation are configured.
 - **Phase 02 — Premium homepage:** Complete. The responsive editorial homepage, reusable UI components, motion, and temporary product data are in place.
+- **Shopping-first UX refinement:** Complete. Product discovery, product details, wishlist, shopping bag, and recently viewed are implemented using temporary browser-side data.
 - **Phase 03 onward:** Not started.
 
-The current homepage is presentation-only. Product data is temporary, wishlist state is local to the page, the bag is a visual placeholder, and the newsletter form validates input without storing or sending it. There is no authentication, checkout, database model, or external API integration.
+The catalog is temporary and the wishlist, bag, and recently viewed state are held in memory; they reset after a full page reload. Checkout, payment, authentication, and external API integration are not implemented. The newsletter validates input without storing or sending it.
 
 ## Technology
 
@@ -35,23 +36,37 @@ frontend/
   src/
     assets/
     components/
+      AurelEdit.jsx
       CategorySection.jsx
-      EditorialBanner.jsx
       Footer.jsx
       HeroSection.jsx
       MobileMenu.jsx
       Navbar.jsx
       Newsletter.jsx
       ProductCard.jsx
+      ProductGridSection.jsx
+      PromotionBanner.jsx
       SectionHeading.jsx
-      TrendingProducts.jsx
+      TrustSection.jsx
+    context/
+      ShopContext.js
+      ShopProvider.jsx
     data/
       products.js
-    layouts/
-    pages/
-      Home.jsx
-    context/
     hooks/
+      useShop.js
+    layouts/
+      RootLayout.jsx
+    pages/
+      BagPage.jsx
+      Home.jsx
+      NotFoundPage.jsx
+      ProductDetailPage.jsx
+      ProductListingPage.jsx
+      WishlistPage.jsx
+    services/
+    utils/
+      formatCurrency.js
     services/
 backend/
   app/
@@ -115,8 +130,10 @@ It returns JSON with `status: "ok"` and `service: "aurel-api"`. Flask-CORS allow
 
 ## Homepage notes
 
-- The homepage includes fashion, accessories, beauty, and lifestyle categories; trending product cards; an editorial feature; and a newsletter sign-up preview.
-- Search filters the temporary product list in the browser. Wishlist toggles are in-memory only.
+- The homepage includes a campaign hero, category links, new arrivals, best sellers, a promotion, The AUREL Edit, recently viewed products, service benefits, and a compact newsletter.
+- Temporary products are defined in `frontend/src/data/products.js`. The catalog supports category and price filters, search, price/popularity sorting, and product detail routes.
+- Wishlist, bag quantities/subtotals, and recently viewed products use shared in-memory state. The bag and wishlist are not persisted across full page reloads; checkout is unavailable.
+- Routes include `/shop`, `/category/:categorySlug`, `/product/:productId`, `/wishlist`, and `/bag`.
 - Motion responds to the user's reduced-motion preference.
 - Editorial photography is loaded from Unsplash and the display fonts from Google Fonts.
 
