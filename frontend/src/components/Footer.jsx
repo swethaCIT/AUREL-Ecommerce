@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom'
 const currentYear = new Date().getFullYear()
 
 const footerLinks = [
-  { label: 'Shop all', to: '/shop' },
   { label: 'New arrivals', to: '/shop?collection=new' },
+  { label: 'Men', to: '/category/men' },
+  { label: 'Women', to: '/category/women' },
+  { label: 'Kids', to: '/category/kids' },
+  { label: 'Beauty', to: '/category/beauty' },
+  { label: 'Accessories', to: '/category/accessories' },
+  { label: 'Footwear', to: '/category/footwear' },
+  { label: 'Home & Living', to: '/category/home-living' },
+  { label: 'Shop all', to: '/shop' },
   { label: 'Wishlist', to: '/wishlist' },
   { label: 'Shopping bag', to: '/bag' },
 ]
@@ -13,7 +20,7 @@ function Footer() {
   return (
     <footer className="bg-charcoal px-5 pb-7 pt-12 text-ivory sm:px-8 sm:pt-14 lg:px-14">
       <div className="mx-auto max-w-[90rem]">
-        <div className="grid gap-10 border-b border-white/15 pb-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.7fr_0.7fr] lg:pb-12">
+        <div className="grid gap-10 border-b border-white/15 pb-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.8fr] lg:pb-12">
           <div className="max-w-md">
             <Link
               to="/"
@@ -27,11 +34,11 @@ function Footer() {
               make your own.
             </p>
           </div>
-          <div>
+          <nav aria-label="Footer shopping links">
             <h2 className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">
               Explore
             </h2>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-4 grid grid-cols-2 gap-x-5 gap-y-3">
               {footerLinks.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -43,7 +50,7 @@ function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
           <div>
             <h2 className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ivory/50">
               AUREL

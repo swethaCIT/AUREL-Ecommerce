@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import ImageWithFallback from '../components/ImageWithFallback.jsx'
 import { useShop } from '../hooks/useShop.js'
 import { products } from '../data/products.js'
 import { formatCurrency } from '../utils/formatCurrency.js'
@@ -22,7 +23,7 @@ function BagPage() {
   })
 
   return (
-    <main id="main-content" className="mx-auto min-h-[65vh] max-w-[90rem] px-5 py-12 sm:px-8 lg:px-14 lg:py-16">
+    <main id="main-content" className="mx-auto min-h-[65vh] max-w-[90rem] px-5 py-10 sm:px-8 lg:px-14 lg:py-14">
       <header className="border-b border-charcoal/10 pb-6">
         <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-olive">
           AUREL
@@ -36,11 +37,11 @@ function BagPage() {
       </header>
 
       {bagLines.length > 0 ? (
-        <div className="grid gap-10 py-8 lg:grid-cols-[1fr_19rem] lg:gap-16">
+        <div className="grid gap-8 py-8 lg:grid-cols-[1fr_21rem] lg:gap-14">
           <div className="divide-y divide-charcoal/10">
             {bagLines.map((item) => (
               <article
-                key={`${item.productId}-${item.size ?? 'one-size'}`}
+                key={`${item.productId}-${item.size ?? 'one-size'}-${item.variant ?? ''}`}
                 className="grid grid-cols-[5.5rem_1fr] gap-4 py-5 first:pt-0 sm:grid-cols-[7rem_1fr_auto] sm:gap-6"
               >
                 <Link
@@ -48,15 +49,15 @@ function BagPage() {
                   aria-label={`View ${item.product.name}`}
                   className="aspect-[0.8] overflow-hidden bg-paper"
                 >
-                  <img
+                  <ImageWithFallback
                     src={item.product.image}
-                    alt={item.product.alt}
+                    alt={item.product.imageAlt}
                     className="size-full object-cover"
                   />
                 </Link>
                 <div className="min-w-0">
                   <p className="text-[0.58rem] uppercase tracking-[0.15em] text-muted">
-                    {item.product.category}
+                    {item.product.brand} · {item.product.category}
                   </p>
                   <h2 className="mt-1 font-serif text-lg text-charcoal">
                     <Link
@@ -71,6 +72,11 @@ function BagPage() {
                       Size: {item.size}
                     </p>
                   )}
+                  {item.variant && (
+                    <p className="mt-1 text-xs text-muted">
+                      {item.product.variantLabel}: {item.variant}
+                    </p>
+                  )}
                   <div className="mt-4 flex items-center gap-2">
                     <button
                       type="button"
@@ -79,6 +85,7 @@ function BagPage() {
                         updateBagQuantity(
                           item.productId,
                           item.size,
+                          item.variant,
                           item.quantity - 1,
                         )
                       }
@@ -99,6 +106,7 @@ function BagPage() {
                         updateBagQuantity(
                           item.productId,
                           item.size,
+                          item.variant,
                           item.quantity + 1,
                         )
                       }
@@ -109,7 +117,11 @@ function BagPage() {
                     <button
                       type="button"
                       onClick={() =>
-                        removeFromBag(item.productId, item.size)
+                        removeFromBag(
+                          item.productId,
+                          item.size,
+                          item.variant,
+                        )
                       }
                       className="ml-2 text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-muted hover:text-charcoal"
                     >
@@ -118,7 +130,7 @@ function BagPage() {
                   </div>
                 </div>
                 <p className="col-start-2 text-sm text-charcoal sm:col-start-auto sm:pt-1">
-                  {formatCurrency(item.product.price * item.quantity)}
+                  {formatCurrency(item.product.sellingPrice * item.quantity)}
                 </p>
               </article>
             ))}
@@ -131,11 +143,11 @@ function BagPage() {
               <span className="text-charcoal">{formatCurrency(bagSubtotal)}</span>
             </div>
             <p className="mt-4 text-xs leading-5 text-muted">
-              Delivery and taxes are not calculated in this preview.
+              Delivery and taxes are not calculated in this demo.
             </p>
-            <p className="mt-4 text-xs leading-5 text-muted">
-              Checkout is not available yet. Your bag is held in this browser
-              session only.
+            <p className="mt-3 text-xs leading-5 text-muted">
+              Checkout and payment are not available. Your bag is saved in this
+              browser only.
             </p>
             <Link
               to="/shop"

@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { BadgeCheck, Leaf, PackageCheck } from 'lucide-react'
+import { BadgeCheck, Leaf, PackageCheck, Truck } from 'lucide-react'
 
 const benefits = [
   {
@@ -17,6 +17,11 @@ const benefits = [
     title: 'Made for everyday',
     description: 'Useful, well-made pieces with a place in your daily rituals.',
   },
+  {
+    icon: Truck,
+    title: 'Delivery details',
+    description: 'Delivery timing and charges are not available in this demo.',
+  },
 ]
 
 function TrustSection() {
@@ -24,7 +29,7 @@ function TrustSection() {
 
   return (
     <section className="px-5 py-14 sm:px-8 sm:py-16 lg:px-14">
-      <div className="mx-auto grid max-w-[90rem] divide-y divide-charcoal/10 border-y border-charcoal/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      <div className="mx-auto grid max-w-[90rem] divide-y divide-charcoal/10 border-y border-charcoal/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
         {benefits.map(({ icon: Icon, title, description }, index) => (
           <motion.article
             key={title}

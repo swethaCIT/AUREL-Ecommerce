@@ -2,95 +2,83 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { categories } from '../data/products.js'
+import ImageWithFallback from './ImageWithFallback.jsx'
 import SectionHeading from './SectionHeading.jsx'
+
+const primaryCategories = categories.filter((category) =>
+  ['men', 'women', 'kids'].includes(category.slug),
+)
 
 function CategorySection() {
   const reducedMotion = useReducedMotion()
 
   return (
     <section
-      id="categories"
-      className="bg-paper px-5 py-20 sm:px-8 sm:py-24 lg:px-14 lg:py-28"
+      id="shop-by-category"
+      className="bg-paper px-5 py-16 sm:px-8 sm:py-20 lg:px-14 lg:py-24"
     >
       <div className="mx-auto max-w-[90rem]">
         <motion.div
-          initial={reducedMotion ? false : { opacity: 0, y: 18 }}
+          initial={reducedMotion ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: reducedMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reducedMotion ? 0 : 0.55 }}
         >
           <SectionHeading
             eyebrow="Shop by category"
-            title="Find your everyday favourite."
-            description="Explore considered clothing, accessories, beauty and pieces for living."
+            title="A good place to begin."
+            description="Find thoughtful everyday pieces for you and the people you love."
           />
         </motion.div>
 
-        <motion.div
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: reducedMotion ? 0 : 0.1,
-              },
-            },
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="mt-10 grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-5 lg:mt-14 lg:grid-cols-4 lg:gap-6"
-        >
-          {categories.map((category, index) => (
-            <motion.div
-              key={category.name}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: reducedMotion ? 0 : 0.65 },
-                },
+        <div className="mt-8 grid gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-10 lg:gap-6">
+          {primaryCategories.map((category, index) => (
+            <motion.article
+              key={category.slug}
+              initial={reducedMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{
+                duration: reducedMotion ? 0 : 0.5,
+                delay: reducedMotion ? 0 : index * 0.07,
               }}
-              className="group"
+              className="group relative"
             >
               <Link
                 to={`/category/${category.slug}`}
-                aria-label={`View all ${category.name}`}
+                aria-label={`Shop ${category.name}`}
                 className="block"
               >
-                <div className="relative aspect-[0.82] overflow-hidden bg-ivory">
-                  <img
+                <div className="relative aspect-[0.86] overflow-hidden bg-ivory sm:aspect-[0.74]">
+                  <ImageWithFallback
                     src={category.image}
                     alt={category.alt}
                     loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
                   />
-                  <span className="absolute left-3 top-3 grid size-7 place-items-center rounded-full bg-ivory/90 text-[0.58rem] text-charcoal sm:left-4 sm:top-4">
-                    0{index + 1}
-                  </span>
-                </div>
-                <div className="flex items-start justify-between gap-2 pt-3 sm:pt-4">
-                  <div>
-                    <h3 className="font-serif text-lg text-charcoal sm:text-xl">
-                      {category.name}
-                    </h3>
-                    <p className="mt-1 text-[0.65rem] tracking-wide text-muted sm:text-xs">
-                      {category.detail}
-                    </p>
-                    <span className="mt-3 inline-block text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-olive">
-                      View all
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/65 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-4 text-white sm:p-5 lg:p-6">
+                    <div>
+                      <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-white/75">
+                        0{index + 1} · AUREL collection
+                      </p>
+                      <h3 className="mt-2 font-serif text-3xl sm:text-4xl">
+                        {category.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-white/80">
+                        {category.detail}
+                      </p>
+                    </div>
+                    <span className="inline-flex shrink-0 items-center gap-2 border border-white/70 px-3 py-2 text-[0.55rem] font-semibold uppercase tracking-[0.12em]">
+                      Shop now
+                      <ArrowUpRight size={14} aria-hidden="true" />
                     </span>
                   </div>
-                  <ArrowUpRight
-                    size={17}
-                    className="mt-1 shrink-0 text-bronze transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden="true"
-                  />
                 </div>
               </Link>
-            </motion.div>
+            </motion.article>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

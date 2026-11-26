@@ -8,10 +8,10 @@ AUREL is a premium lifestyle and fashion shopping single-page application. This 
 
 - **Phase 01 — Project initialization:** Complete. React/Vite, Tailwind CSS v4, and the Flask application-factory foundation are configured.
 - **Phase 02 — Premium homepage:** Complete. The responsive editorial homepage, reusable UI components, motion, and temporary product data are in place.
-- **Shopping-first UX refinement:** Complete. Product discovery, product details, wishlist, shopping bag, and recently viewed are implemented using temporary browser-side data.
-- **Phase 03 onward:** Not started.
+- **Marketplace frontend transformation:** Complete. The homepage, catalogue, product details, filters, wishlist, shopping bag, and recently viewed experience are implemented with temporary browser-side data.
+- **Backend integration:** Not started.
 
-The catalog is temporary and the wishlist, bag, and recently viewed state are held in memory; they reset after a full page reload. Checkout, payment, authentication, and external API integration are not implemented. The newsletter validates input without storing or sending it.
+The 48-product catalog, ratings, reviews, offers, and brands are demonstration data. Wishlist, bag, and recently viewed state persist in browser `localStorage`; this is not server-side storage. Checkout, payment, authentication, and external API integration are not implemented. The newsletter validates input without storing or sending it.
 
 ## Technology
 
@@ -36,17 +36,21 @@ frontend/
   src/
     assets/
     components/
+      AnnouncementBar.jsx
       AurelEdit.jsx
+      BrandSection.jsx
+      CartDrawer.jsx
       CategorySection.jsx
+      DepartmentSection.jsx
       Footer.jsx
       HeroSection.jsx
+      ImageWithFallback.jsx
       MobileMenu.jsx
       Navbar.jsx
-      Newsletter.jsx
+      OfferHighlights.jsx
       ProductCard.jsx
       ProductGridSection.jsx
-      PromotionBanner.jsx
-      SectionHeading.jsx
+      RecommendedSection.jsx
       TrustSection.jsx
     context/
       ShopContext.js
@@ -64,10 +68,8 @@ frontend/
       ProductDetailPage.jsx
       ProductListingPage.jsx
       WishlistPage.jsx
-    services/
     utils/
       formatCurrency.js
-    services/
 backend/
   app/
     models/
@@ -128,13 +130,16 @@ Invoke-RestMethod http://127.0.0.1:5000/api/health
 
 It returns JSON with `status: "ok"` and `service: "aurel-api"`. Flask-CORS allows the frontend origin configured by `FRONTEND_ORIGINS` in `backend/.env`.
 
-## Homepage notes
+## Marketplace frontend
 
-- The homepage includes a campaign hero, category links, new arrivals, best sellers, a promotion, The AUREL Edit, recently viewed products, service benefits, and a compact newsletter.
-- Temporary products are defined in `frontend/src/data/products.js`. The catalog supports category and price filters, search, price/popularity sorting, and product detail routes.
-- Wishlist, bag quantities/subtotals, and recently viewed products use shared in-memory state. The bag and wishlist are not persisted across full page reloads; checkout is unavailable.
-- Routes include `/shop`, `/category/:categorySlug`, `/product/:productId`, `/wishlist`, and `/bag`.
-- Motion responds to the user's reduced-motion preference.
-- Editorial photography is loaded from Unsplash and the display fonts from Google Fonts.
+- The homepage combines a four-campaign carousel, Men/Women/Kids shopping links, offers, new arrivals, trending products, departments, brands, The AUREL Edit, recommendations, service benefits, and newsletter signup.
+- The temporary catalog is centralized in `frontend/src/data/products.js`: 10 Men, 12 Women, 8 Kids, 6 Beauty, 6 Accessories, and 6 Home & Living products. Product discounts are calculated from original and selling prices.
+- Catalogue routes support product/brand search, department and subcategory, price, discount, brand, rating, and size filters; sorting; result counts; empty states; and pagination.
+- Product detail pages include image galleries, variants, quantity selection, related products, wishlist controls, and add-to-bag feedback.
+- Shared shopping state is stored in browser `localStorage`. The cart drawer and bag page show selected variants, quantities, and subtotals. Recently viewed products and wishlist are shared across SPA routes.
+- Routes include `/shop`, `/category/:categorySlug`, `/product/:productId`, `/wishlist`, and `/bag`. Internal navigation uses React Router.
+- Campaign offers and product information are demo data. There is no checkout, payment processing, authentication, backend catalog, or API integration.
+- Failed product images use a local fallback. Motion respects the user's reduced-motion preference.
+- Editorial photography is loaded from Unsplash and display fonts from Google Fonts.
 
 Do not commit `backend/.env` or other secrets. The root `.gitignore` excludes environment files, virtual environments, installed packages, and build output.
