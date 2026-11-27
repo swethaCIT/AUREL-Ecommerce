@@ -12,6 +12,10 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "local-development-jwt-secret")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///aurel.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DUMMYJSON_PRODUCTS_URL = os.getenv(
+        "DUMMYJSON_PRODUCTS_URL", "https://dummyjson.com/products"
+    )
+    DUMMYJSON_TIMEOUT = float(os.getenv("DUMMYJSON_TIMEOUT", "10"))
     FRONTEND_ORIGINS = [
         origin.strip()
         for origin in os.getenv(

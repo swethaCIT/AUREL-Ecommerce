@@ -7,7 +7,9 @@ import ImageWithFallback from './ImageWithFallback.jsx'
 
 function ProductCard({ product }) {
   const { wishlistIds, toggleWishlist } = useShop()
-  const isSaved = wishlistIds.includes(product.id)
+  const wishlistEnabled = product.wishlistEnabled !== false
+  const detailsEnabled = product.detailsEnabled !== false
+  const isSaved = wishlistEnabled && wishlistIds.includes(product.id)
   const productPath = `/product/${product.id}`
 
   return (
@@ -23,18 +25,27 @@ function ProductCard({ product }) {
       className="group min-w-0"
     >
       <div className="relative aspect-[0.78] overflow-hidden bg-paper">
-        <Link
-          to={productPath}
-          aria-label={`View details for ${product.brand} ${product.name}`}
-          className="absolute inset-0"
-        >
+        {detailsEnabled ? (
+          <Link
+            to={productPath}
+            aria-label={`View details for ${product.brand} ${product.name}`}
+            className="absolute inset-0"
+          >
+            <ImageWithFallback
+              src={product.image}
+              alt={product.imageAlt}
+              loading="lazy"
+              className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+            />
+          </Link>
+        ) : (
           <ImageWithFallback
             src={product.image}
             alt={product.imageAlt}
             loading="lazy"
             className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045]"
           />
-        </Link>
+        )}
         <span className="pointer-events-none absolute left-2 top-2 bg-ivory/95 px-2 py-1 text-[0.52rem] font-semibold uppercase tracking-[0.1em] text-olive sm:left-3 sm:top-3">
           {product.isNew ? 'New' : 'Demo offer'}
         </span>
@@ -45,10 +56,21 @@ function ProductCard({ product }) {
           type="button"
           whileTap={{ scale: 0.9 }}
           onClick={() => toggleWishlist(product.id)}
-          aria-label={`${isSaved ? 'Remove from' : 'Save to'} Wishlist: ${product.name}`}
+          disabled={!wishlistEnabled}
+          aria-label={
+            wishlistEnabled
+              ? `${isSaved ? 'Remove from' : 'Save to'} Wishlist: ${product.name}`
+              : `Wishlist is not available for ${product.name} yet`
+          }
           aria-pressed={isSaved}
-          title={isSaved ? 'Remove from Wishlist' : 'Save to Wishlist'}
-          className="absolute right-2 top-2 grid size-9 place-items-center rounded-full bg-ivory/95 text-charcoal transition-colors hover:text-bronze sm:right-3 sm:top-3"
+          title={
+            wishlistEnabled
+              ? isSaved
+                ? 'Remove from Wishlist'
+                : 'Save to Wishlist'
+              : 'Wishlist is not connected for catalogue products yet'
+          }
+          className="absolute right-2 top-2 grid size-9 place-items-center rounded-full bg-ivory/95 text-charcoal transition-colors hover:text-bronze disabled:cursor-not-allowed disabled:opacity-70 sm:right-3 sm:top-3"
         >
           <Heart
             size={17}
@@ -64,19 +86,28 @@ function ProductCard({ product }) {
               {product.brand}
             </p>
             <h3 className="mt-1 truncate font-serif text-[0.95rem] text-charcoal sm:text-lg">
-              <Link to={productPath} className="hover:text-olive">
-                {product.name}
-              </Link>
+              {detailsEnabled ? (
+                <Link to={productPath} className="hover:text-olive">
+                  {product.name}
+                </Link>
+              ) : (
+                product.name
+              )}
             </h3>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1 bg-paper px-1.5 py-1 text-[0.58rem] text-charcoal">
-            {product.rating.toFixed(1)}
-            <Star size={10} fill="currentColor" aria-hidden="true" />
-          </span>
+          {Number.isFinite(product.rating) && (
+            <span className="inline-flex shrink-0 items-center gap-1 bg-paper px-1.5 py-1 text-[0.58rem] text-charcoal">
+              {product.rating.toFixed(1)}
+              <Star size={10} fill="currentColor" aria-hidden="true" />
+            </span>
+          )}
         </div>
         <p className="mt-1 text-[0.58rem] text-muted">
-          {product.category} · {product.subcategory}
-          <span className="sr-only"> · {product.reviewCount} reviews</span>
+          {product.category}
+          {product.subcategory && ` · ${product.subcategory}`}
+          {Number.isFinite(product.reviewCount) && (
+            <span className="sr-only"> · {product.reviewCount} reviews</span>
+          )}
         </p>
         <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span className="text-xs font-semibold text-charcoal sm:text-sm">
@@ -89,12 +120,22 @@ function ProductCard({ product }) {
             {product.discountPercentage}% off
           </span>
         </div>
-        <Link
-          to={productPath}
-          className="mt-3 inline-flex min-h-9 w-full items-center justify-center border border-charcoal/15 text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-charcoal transition-colors hover:border-olive hover:bg-olive hover:text-white"
-        >
-          View details
-        </Link>
+        {detailsEnabled ? (
+          <Link
+            to={productPath}
+            className="mt-3 inline-flex min-h-9 w-full items-center justify-center border border-charcoal/15 text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-charcoal transition-colors hover:border-olive hover:bg-olive hover:text-white"
+          >
+            View details
+          </Link>
+        ) : (
+          <span
+            aria-disabled="true"
+            title="Product detail pages are not part of this integration milestone"
+            className="mt-3 inline-flex min-h-9 w-full cursor-not-allowed items-center justify-center border border-charcoal/10 text-[0.56rem] font-semibold uppercase tracking-[0.12em] text-muted"
+          >
+            Details coming soon
+          </span>
+        )}
       </div>
     </motion.article>
   )
